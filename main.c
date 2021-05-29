@@ -123,7 +123,6 @@ int main() {
             float f = 0;
             sscanf(buffer, "%f", &f);
             printf("Your float: %f \r\n", f);
-            memset(&buffer[0], 0, sizeof(buffer));
             buffer[0] = '\0';
             ready = 0;
         } else {
