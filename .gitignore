@@ -1,4 +1,4 @@
 build/
 debug/
-.generated_files
+.generated_files/
 dist/
