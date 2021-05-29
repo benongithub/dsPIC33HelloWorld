@@ -110,18 +110,28 @@ int main() {
     
     // initTimer1(4166); //creates a 10ms timer interrupt
     // setupPWM();
-    // startTimer1();
+    initTimer1InMS(1);
+    startTimer1();
     
-    printf("Please insert float: \r\n");
+    printf("Init finished\r\n");
+    printf("Millis at Start: %d \r\n", myCounter);
+    unsigned int test = myCounter;
+    
+    // printf("Start %d", myCounter);
+    /* printf("Please insert float: \r\n");
     char buffer [32];
     int cnt = 0;
-    char ready = 0;
+    char ready = 0; */
     
     while (1) {
-        if(ready == 1) {
-            // printf(buffer);
-            float f = 0;
-            sscanf(buffer, "%f", &f);
+        if((myCounter - test)>100) {
+            printf("Tick\r\n");
+            test = myCounter;
+        }
+        
+        /*if(ready == 1) {
+            double f = 0;
+            sscanf(buffer, "%lf", &f);
             printf("Your float: %f \r\n", f);
             buffer[0] = '\0';
             ready = 0;
@@ -136,7 +146,7 @@ int main() {
                 cnt = 0;
                 ready = 1;
             }
-        }
+        }*/
 		/*int a;
 		
 		while (_U1RXIF==0);			// Wait and Receive One Character
