@@ -38,5 +38,6 @@ void startTimer1(void);
 
 void initTimer1InMS(unsigned int timeInMS);
 
-#endif	/* XC_HEADER_TEMPLATE_H */
+static unsigned int comparator;
 
+#endif	/* XC_HEADER_TEMPLATE_H */

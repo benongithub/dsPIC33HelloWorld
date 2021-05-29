@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=TutProj
+PROJECTNAME=dsPIC33HelloWorld
 
 # Active Configuration
 DEFAULTCONF=default
