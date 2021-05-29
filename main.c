@@ -1,8 +1,7 @@
 /* 
  * File:   main.c
- * Author: Alexander Lenz
+ * Author: Benedikt Müller
  *
- * Created on 27 Nov 2020, 09:36
  */
 
 
@@ -36,7 +35,7 @@
 #pragma config FPWRT = PWR128           // POR Timer Value (128ms)
 #pragma config ALTI2C = ON             // Alternate I2C  pins (I2C mapped to SDA1/SCL1 pins)
 #pragma config LPOL = ON                // Motor Control PWM Low Side Polarity bit (PWM module low side output pins have active-high output polarity)
-#pragma config HPOL = ON                // Motor Control PWM High Side Polarity bit (PWM module high side output pins have active-high output polarity)
+#pragma config HPOL = OFF                // Motor Control PWM High Side Polarity bit (PWM module high side output pins have active-high output polarity)
 #pragma config PWMPIN = ON              // Motor Control PWM Module Pin Mode bit (PWM module pins controlled by PORT register at device Reset)
 
 // FICD
@@ -46,81 +45,118 @@
 
 /// Include headers-------------------------------
 #include "xc.h"
+#include <stdio.h>              // Standard I/O - required for printf() function
 #include "IOconfig.h"
-#include "timer1.h"
+#include "myTimers.h"
+#include "mypwm.h"
 
 
 /// Defines----------------------------
-#define SEVEN_MEG_OSC 0//set to 1 if we use slow (7.3728 MHz) oscillator and not 16 MHz
+#define SEVEN_MEG_OSC 1//set to 1 if we use slow (7.3728 MHz) oscillator and not 16 MHz
 
 /*
  * 
  */
-int main() 
-{
-    int pinStatus;
+int main() {
+    // int pinStatus;
 #if (SEVEN_MEG_OSC == 0) 
-     /*** oscillator setup --------------------------------------------------
+    /*** oscillator setup --------------------------------------------------
      * The external oscillator runs at 16MHz
      * PLL is used to generate 53.3 MHz clock (FOSC)
      * The relationship between oscillator and cycle frequency: FCY = FOSC/2
      * Have a look at "PLL Configuration" paragraph in the mcu manual
     
      * Result: FCY = 0.5 * (16MHz*20/(3*2)) = 26.666 MIPS, Tcycle=37.5nsec
-    ---------------------------------------------------------------------***/
-    PLLFBDbits.PLLDIV = 18;                      //set PPL to M=20 (18+2)
-    CLKDIVbits.PLLPRE = 1;            //N1 = input/3
-    CLKDIVbits.PLLPOST = 0;           //N2 = output/2
-    
-    
-    
+   ---------------------------------------------------------------------***/
+    PLLFBDbits.PLLDIV = 18; //set PPL to M=20 (18+2)
+    CLKDIVbits.PLLPRE = 1; //N1 = input/3
+    CLKDIVbits.PLLPOST = 0; //N2 = output/2
+
+
+
 #else //Below the 7.3728 Setup 
-    
-         /*** oscillator setup --------------------------------------------------
+
+    /*** oscillator setup --------------------------------------------------
      * The external oscillator runs at 7.3728 MHz
      * PLL is used to generate 53.3 MHz clock (FOSC)
      * The relationship between oscillator and cycle frequency: FCY = FOSC/2
      * Have a look at "PLL Configuration" paragraph in the mcu manual
     
      * Result: FCY = 0.5 * (7.3728 MHz*29/(2*2)) = 26.73 MIPS, which is 
-          * not exactl Tcycle=37.5nsec, but close enough for our purposes
+     * not exactl Tcycle=37.5nsec, but close enough for our purposes
     ---------------------------------------------------------------------***/
-    PLLFBDbits.PLLDIV = 27;                      //set PPL to M=29 (27+2)
-    CLKDIVbits.PLLPRE = 0;            //N1 = input/2
-    CLKDIVbits.PLLPOST = 0;           //N2 = output/2
+    PLLFBDbits.PLLDIV = 27; //set PPL to M=29 (27+2)
+    CLKDIVbits.PLLPRE = 0; //N1 = input/2
+    CLKDIVbits.PLLPOST = 0; //N2 = output/2
 #endif //SEVEN_MEG_OSC == 0
-    
-    
-        /* Clock switch to incorporate PLL*/
-    __builtin_write_OSCCONH( 0x03 );            // Initiate Clock Switch to Primary
+
+
+    /* Clock switch to incorporate PLL*/
+    __builtin_write_OSCCONH(0x03); // Initiate Clock Switch to Primary
 
     // Oscillator with PLL (NOSC=0b011)
-    __builtin_write_OSCCONL( OSCCON || 0x01 );  // Start clock switching
-    
-    while( OSCCONbits.COSC != 0b011 );
-    
+    __builtin_write_OSCCONL(OSCCON || 0x01); // Start clock switching
+
+    while (OSCCONbits.COSC != 0b011);
+
     // In reality, give some time to the PLL to lock
     while (OSCCONbits.LOCK != 1); //Wait for PPL to lock
- 
+
     setupIO(); //configures inputs and outputs
-    initTimer1(4166); //creates a 10ms timer interrupt
-    startTimer1();
-    
-    LED4 = 1; //switches off
-  
-    LED5 = LEDON;
- 
-    LED6 = LEDON;
-
+    LED4 = LEDOFF;
+    LED5 = LEDOFF;
+    LED6 = LEDOFF;
     LED7 = LEDOFF;
-
-    while(1)
-    {
-        
-       
-    };
- 
     
+    // initTimer1(4166); //creates a 10ms timer interrupt
+    // setupPWM();
+    // startTimer1();
+    
+    printf("Please insert float: \r\n");
+    char buffer [32];
+    int cnt = 0;
+    char ready = 0;
+    
+    while (1) {
+        if(ready == 1) {
+            // printf(buffer);
+            float f = 0;
+            sscanf(buffer, "%f", &f);
+            printf("Your float: %f \r\n", f);
+            memset(&buffer[0], 0, sizeof(buffer));
+            buffer[0] = '\0';
+            ready = 0;
+        } else {
+            char newChar;
+            while (_U1RXIF==0);			// Wait and Receive One Character
+            newChar = U1RXREG;
+            _U1RXIF=0;
+            buffer[cnt++] = newChar;
+            if((newChar == '\r') || (newChar == '\n') || (cnt == sizeof(buffer)-1)) {
+                buffer[cnt] = '\0';
+                cnt = 0;
+                ready = 1;
+            }
+        }
+		/*int a;
+		
+		while (_U1RXIF==0);			// Wait and Receive One Character
+		a = U1RXREG;
+		
+		while(!U1STAbits.TRMT);
+		U1TXREG = '"';
+	
+		while(!U1STAbits.TRMT);		// Echo Back Received Character with quotes
+		U1TXREG = a;
+	
+		while(!U1STAbits.TRMT);
+		U1TXREG = '"';
+	
+		while(!U1STAbits.TRMT);
+		U1TXREG = ' '; 	
+	
+		_U1RXIF=0;					// Clear UART RX Interrupt Flag*/
+    };
     return 0;
 }
 

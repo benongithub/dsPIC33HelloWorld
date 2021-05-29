@@ -21,6 +21,9 @@
 #define LEDOFF 1
 
 void setupIO();
+void UART_PutChar(char c);
+int write(int handle, void *buffer, unsigned int len);
+
 
 #endif	/* IOCONFIG_H */
 

@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=IOconfig.c main.c myTimers.c
+SOURCEFILES_QUOTED_IF_SPACED=IOconfig.c main.c myTimers.c mypwm.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/IOconfig.o ${OBJECTDIR}/main.o ${OBJECTDIR}/myTimers.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/IOconfig.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/myTimers.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/IOconfig.o ${OBJECTDIR}/main.o ${OBJECTDIR}/myTimers.o ${OBJECTDIR}/mypwm.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/IOconfig.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/myTimers.o.d ${OBJECTDIR}/mypwm.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/IOconfig.o ${OBJECTDIR}/main.o ${OBJECTDIR}/myTimers.o
+OBJECTFILES=${OBJECTDIR}/IOconfig.o ${OBJECTDIR}/main.o ${OBJECTDIR}/myTimers.o ${OBJECTDIR}/mypwm.o
 
 # Source Files
-SOURCEFILES=IOconfig.c main.c myTimers.c
+SOURCEFILES=IOconfig.c main.c myTimers.c mypwm.c
 
 
 
@@ -95,23 +95,29 @@ MP_LINKER_FILE_OPTION=,--script=p33FJ128MC802.gld
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/IOconfig.o: IOconfig.c  .generated_files/e87b86bc3f6a7d68ad8616afa68e12e115a49b5b.flag .generated_files/b7541f3291fe7b63cd41edb6d34186dc81c6e08b.flag
+${OBJECTDIR}/IOconfig.o: IOconfig.c  .generated_files/ed989581d62d2e25fdc7f03c4ff3369f3c83495e.flag .generated_files/b7541f3291fe7b63cd41edb6d34186dc81c6e08b.flag
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/IOconfig.o.d 
 	@${RM} ${OBJECTDIR}/IOconfig.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  IOconfig.c  -o ${OBJECTDIR}/IOconfig.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/IOconfig.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1    -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	${MP_CC} $(MP_EXTRA_CC_PRE)  IOconfig.c  -o ${OBJECTDIR}/IOconfig.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/IOconfig.o.d"      -g -D__DEBUG     -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
-${OBJECTDIR}/main.o: main.c  .generated_files/e1c1b91e3e11a4e72e5216413572137169ca9660.flag .generated_files/b7541f3291fe7b63cd41edb6d34186dc81c6e08b.flag
+${OBJECTDIR}/main.o: main.c  .generated_files/eb86a16317ed8f9e07b556b22082503f2be54162.flag .generated_files/b7541f3291fe7b63cd41edb6d34186dc81c6e08b.flag
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/main.o.d 
 	@${RM} ${OBJECTDIR}/main.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  main.c  -o ${OBJECTDIR}/main.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/main.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1    -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	${MP_CC} $(MP_EXTRA_CC_PRE)  main.c  -o ${OBJECTDIR}/main.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/main.o.d"      -g -D__DEBUG     -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
-${OBJECTDIR}/myTimers.o: myTimers.c  .generated_files/b36d0421a2bafc7b3d32768d792b0ac55d194d10.flag .generated_files/b7541f3291fe7b63cd41edb6d34186dc81c6e08b.flag
+${OBJECTDIR}/myTimers.o: myTimers.c  .generated_files/3f737659a00eced148098fc87a7c8d678c1a58a7.flag .generated_files/b7541f3291fe7b63cd41edb6d34186dc81c6e08b.flag
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/myTimers.o.d 
 	@${RM} ${OBJECTDIR}/myTimers.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  myTimers.c  -o ${OBJECTDIR}/myTimers.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/myTimers.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1    -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	${MP_CC} $(MP_EXTRA_CC_PRE)  myTimers.c  -o ${OBJECTDIR}/myTimers.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/myTimers.o.d"      -g -D__DEBUG     -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	
+${OBJECTDIR}/mypwm.o: mypwm.c  .generated_files/e919c86428c4abb16e18ab6661f10e7070bac8ed.flag .generated_files/b7541f3291fe7b63cd41edb6d34186dc81c6e08b.flag
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/mypwm.o.d 
+	@${RM} ${OBJECTDIR}/mypwm.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  mypwm.c  -o ${OBJECTDIR}/mypwm.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/mypwm.o.d"      -g -D__DEBUG     -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
 else
 ${OBJECTDIR}/IOconfig.o: IOconfig.c  .generated_files/bbc2342c56d771d0312f25aefed1e0dafa15123.flag .generated_files/b7541f3291fe7b63cd41edb6d34186dc81c6e08b.flag
@@ -132,6 +138,12 @@ ${OBJECTDIR}/myTimers.o: myTimers.c  .generated_files/3ee9134451bd7adeb68dfc9d00
 	@${RM} ${OBJECTDIR}/myTimers.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  myTimers.c  -o ${OBJECTDIR}/myTimers.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/myTimers.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
+${OBJECTDIR}/mypwm.o: mypwm.c  .generated_files/7981bee6a62668bd9c8b2c24f7ea28d4b7a5d64d.flag .generated_files/b7541f3291fe7b63cd41edb6d34186dc81c6e08b.flag
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/mypwm.o.d 
+	@${RM} ${OBJECTDIR}/mypwm.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  mypwm.c  -o ${OBJECTDIR}/mypwm.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/mypwm.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	
 endif
 
 # ------------------------------------------------------------------------------------
@@ -151,7 +163,7 @@ endif
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 dist/${CND_CONF}/${IMAGE_TYPE}/TutProj.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk    
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
-	${MP_CC} $(MP_EXTRA_LD_PRE)  -o dist/${CND_CONF}/${IMAGE_TYPE}/TutProj.${IMAGE_TYPE}.${OUTPUT_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}      -mcpu=$(MP_PROCESSOR_OPTION)        -D__DEBUG=__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1  -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)      -Wl,,,--defsym=__MPLAB_BUILD=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,-D__DEBUG=__DEBUG,--defsym=__MPLAB_DEBUGGER_SIMULATOR=1,$(MP_LINKER_FILE_OPTION),--stack=16,--check-sections,--data-init,--pack-data,--handles,--isr,--no-gc-sections,--fill-upper=0,--stackguard=16,--no-force-link,--smart-io,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map",--report-mem,--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml$(MP_EXTRA_LD_POST)  -mdfp="${DFP_DIR}/xc16" 
+	${MP_CC} $(MP_EXTRA_LD_PRE)  -o dist/${CND_CONF}/${IMAGE_TYPE}/TutProj.${IMAGE_TYPE}.${OUTPUT_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}      -mcpu=$(MP_PROCESSOR_OPTION)        -D__DEBUG=__DEBUG   -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)   -mreserve=data@0x800:0x81F -mreserve=data@0x820:0x821 -mreserve=data@0x822:0x823 -mreserve=data@0x824:0x825 -mreserve=data@0x826:0x84F   -Wl,,,--defsym=__MPLAB_BUILD=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,-D__DEBUG=__DEBUG,,$(MP_LINKER_FILE_OPTION),--stack=16,--check-sections,--data-init,--pack-data,--handles,--isr,--no-gc-sections,--fill-upper=0,--stackguard=16,--no-force-link,--smart-io,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map",--report-mem,--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml$(MP_EXTRA_LD_POST)  -mdfp="${DFP_DIR}/xc16" 
 	
 else
 dist/${CND_CONF}/${IMAGE_TYPE}/TutProj.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk   

@@ -20,6 +20,25 @@ void initTimer1(unsigned int period)
     T1CONbits.TON = 0;      // leave timer disabled initially
 }
 
+/**
+ * Tick Length = 2.4us => (timeInMs * 1000) / 2,4
+ * @param timeInMs
+ */
+void initTimer1InMs(unsigned int timeInMs) {
+    
+    T1CON = 0;              // ensure Timer 1 is in reset state
+ 
+    T1CONbits.TCKPS = 0b10; // FCY divide by 64: tick = 2.4us (Tcycle=37.5ns)
+    T1CONbits.TCS = 0;      // select internal FCY clock source
+    T1CONbits.TGATE = 0;    // gated time accumulation disabled
+    TMR1 = 0;
+    PR1 = (timeInMs*1000) / 2,4;           // set Timer 1 period register ()
+    IFS0bits.T1IF = 0;      // reset Timer 1 interrupt flag
+    IPC0bits.T1IP = 4;      // set Timer1 interrupt priority level to 4
+    IEC0bits.T1IE = 1;      // enable Timer 1 interrupt
+    T1CONbits.TON = 0;      // leave timer disabled initially
+}
+
 void startTimer1(void) 
 {
     T1CONbits.TON = 1; //
@@ -30,6 +49,13 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 {
     static int myCount=0;
     IFS0bits.T1IF = 0;           // reset Timer 1 interrupt flag 
-    myCount++;
-    LED6=~LED6;
+    myCount += 100;
+    if ( myCount >= 2*26666L) {
+        myCount = 0;
+    }
+    P1DC1 = myCount;
+    /*if(myCount  == 10) {
+        LED6=~LED6;
+        myCount = 0;
+    }*/
 }//
