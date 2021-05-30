@@ -46,10 +46,11 @@
 /// Include headers-------------------------------
 #include "xc.h"
 #include <stdio.h>              // Standard I/O - required for printf() function
+#include <stdbool.h>
 #include "IOconfig.h"
 #include "myTimers.h"
 #include "mypwm.h"
-
+#include "myadc.h"
 
 /// Defines----------------------------
 #define SEVEN_MEG_OSC 1//set to 1 if we use slow (7.3728 MHz) oscillator and not 16 MHz
@@ -114,8 +115,8 @@ int main() {
     startTimer1();
     
     printf("Init finished\r\n");
-    printf("Millis at Start: %d \r\n", myCounter);
-    unsigned int test = myCounter;
+    printf("Millis at Start: %lu \r\n", millis());
+    unsigned long test = millis();
     
     // printf("Start %d", myCounter);
     /* printf("Please insert float: \r\n");
@@ -123,11 +124,25 @@ int main() {
     int cnt = 0;
     char ready = 0; */
     
+    bool switchState = false;
+    
     while (1) {
-        if((myCounter - test)>100) {
-            printf("Tick\r\n");
-            test = myCounter;
+        unsigned long current_millis = millis();
+        if((unsigned long)(current_millis - test)>=1000) {
+            printf("Current %lu - Last %lu = %lu\r\n", current_millis, test, (unsigned long)(current_millis - test));
+            test = current_millis;
         }
+        
+        if (SW1 && !switchState)
+        {
+            printf("Button pressed\r\n");
+            switchState = true;
+        } else if (!SW1 && switchState)
+        {
+            printf("Button released\r\n");
+            switchState = false;
+        }
+        // printf("%d \r\n", millisCounter);
         
         /*if(ready == 1) {
             double f = 0;

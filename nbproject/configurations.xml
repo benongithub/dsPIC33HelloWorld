@@ -7,6 +7,7 @@
       <itemPath>IOconfig.h</itemPath>
       <itemPath>myTimers.h</itemPath>
       <itemPath>mypwm.h</itemPath>
+      <itemPath>myadc.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -19,6 +20,7 @@
       <itemPath>main.c</itemPath>
       <itemPath>myTimers.c</itemPath>
       <itemPath>mypwm.c</itemPath>
+      <itemPath>myadc.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

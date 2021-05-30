@@ -21,6 +21,7 @@ void initTimer1(unsigned int period)
     
     comparator = 0;
     myCounter = 1;
+    millisCounter = 0;
 }
 
 void initTimer1InMS(unsigned int timeInMS)
@@ -51,6 +52,7 @@ void initTimer1InMS(unsigned int timeInMS)
     
     comparator = timeInMS;
     myCounter = 1;
+    millisCounter = 0;
 }
 
 void startTimer1(void) 
@@ -59,9 +61,15 @@ void startTimer1(void)
  
 }
 
+unsigned long millis(void)
+{
+    return millisCounter;
+}
+
 void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 {
     IFS0bits.T1IF = 0;           // reset Timer 1 interrupt flag 
+    ++millisCounter;
     
     if(myCounter != comparator)
     {

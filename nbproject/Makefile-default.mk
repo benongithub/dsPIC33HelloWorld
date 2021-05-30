@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=IOconfig.c main.c myTimers.c mypwm.c
+SOURCEFILES_QUOTED_IF_SPACED=IOconfig.c main.c myTimers.c mypwm.c myadc.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/IOconfig.o ${OBJECTDIR}/main.o ${OBJECTDIR}/myTimers.o ${OBJECTDIR}/mypwm.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/IOconfig.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/myTimers.o.d ${OBJECTDIR}/mypwm.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/IOconfig.o ${OBJECTDIR}/main.o ${OBJECTDIR}/myTimers.o ${OBJECTDIR}/mypwm.o ${OBJECTDIR}/myadc.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/IOconfig.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/myTimers.o.d ${OBJECTDIR}/mypwm.o.d ${OBJECTDIR}/myadc.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/IOconfig.o ${OBJECTDIR}/main.o ${OBJECTDIR}/myTimers.o ${OBJECTDIR}/mypwm.o
+OBJECTFILES=${OBJECTDIR}/IOconfig.o ${OBJECTDIR}/main.o ${OBJECTDIR}/myTimers.o ${OBJECTDIR}/mypwm.o ${OBJECTDIR}/myadc.o
 
 # Source Files
-SOURCEFILES=IOconfig.c main.c myTimers.c mypwm.c
+SOURCEFILES=IOconfig.c main.c myTimers.c mypwm.c myadc.c
 
 
 
@@ -119,6 +119,12 @@ ${OBJECTDIR}/mypwm.o: mypwm.c  .generated_files/e919c86428c4abb16e18ab6661f10e70
 	@${RM} ${OBJECTDIR}/mypwm.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  mypwm.c  -o ${OBJECTDIR}/mypwm.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/mypwm.o.d"      -g -D__DEBUG     -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
+${OBJECTDIR}/myadc.o: myadc.c  .generated_files/4f5e54aaa03b7e6009d93e20177aef51069d3d92.flag .generated_files/b7541f3291fe7b63cd41edb6d34186dc81c6e08b.flag
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/myadc.o.d 
+	@${RM} ${OBJECTDIR}/myadc.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  myadc.c  -o ${OBJECTDIR}/myadc.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/myadc.o.d"      -g -D__DEBUG     -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	
 else
 ${OBJECTDIR}/IOconfig.o: IOconfig.c  .generated_files/bbc2342c56d771d0312f25aefed1e0dafa15123.flag .generated_files/b7541f3291fe7b63cd41edb6d34186dc81c6e08b.flag
 	@${MKDIR} "${OBJECTDIR}" 
@@ -143,6 +149,12 @@ ${OBJECTDIR}/mypwm.o: mypwm.c  .generated_files/7981bee6a62668bd9c8b2c24f7ea28d4
 	@${RM} ${OBJECTDIR}/mypwm.o.d 
 	@${RM} ${OBJECTDIR}/mypwm.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  mypwm.c  -o ${OBJECTDIR}/mypwm.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/mypwm.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	
+${OBJECTDIR}/myadc.o: myadc.c  .generated_files/d9f2e768768213fb5b37e6eb5dc95fb4ad3a7540.flag .generated_files/b7541f3291fe7b63cd41edb6d34186dc81c6e08b.flag
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/myadc.o.d 
+	@${RM} ${OBJECTDIR}/myadc.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  myadc.c  -o ${OBJECTDIR}/myadc.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/myadc.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
 endif
 
