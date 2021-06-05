@@ -3,7 +3,7 @@
 
 #include <xc.h>
 
-void initQEI1(int startPos);
+void initQEI1(unsigned int startPos);
 long getPositionInCounts_1(void);
 
 void initQEI2(unsigned int startPos);

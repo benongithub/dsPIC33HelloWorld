@@ -1,12 +1,16 @@
 #include "xc.h"
 #include "myencoder.h"
+#include "myTimers.h"
+#include "IOconfig.h"
 
 long rotationCount1;
-volatile long rotationCount2;
+long rotationCount2;
 
-void initQEI1(int startPos) {
+unsigned long lastRotationCount1;
+
+void initQEI1(unsigned int startPos) {
     QEI1CONbits.QEISIDL = 1;
-    QEI1CONbits.QEIM = 0b111;
+    QEI1CONbits.QEIM = 0b101;
     QEI1CONbits.SWPAB = 0;
     QEI1CONbits.PCDOUT = 0;
     QEI1CONbits.TQGATE = 0;
@@ -14,10 +18,14 @@ void initQEI1(int startPos) {
     QEI1CONbits.TQCS = 0;
     QEI1CONbits.UPDN_SRC = 0;
     
+    DFLT1CONbits.QEOUT = 1;
+    DFLT1CONbits.QECK = 0b111;
+    
     MAXCNT = 0xffff;
     
     POSCNT = startPos;
     rotationCount1=0;
+    // lastRotationCount1=millis();
     
     IFS3bits.QEI1IF = 0; //clear
     IPC14bits.QEI1IP = 5; // priority
@@ -34,6 +42,9 @@ void initQEI2(unsigned int startPos) {
     QEI2CONbits.TQCS = 0;
     QEI2CONbits.UPDN_SRC = 0;
     
+    DFLT2CONbits.QEOUT = 1;
+    DFLT2CONbits.QECK = 0b111;
+    
     MAX2CNT = 0xffff;
     
     POS2CNT = startPos;
@@ -47,12 +58,38 @@ void initQEI2(unsigned int startPos) {
 void __attribute__((__interrupt__, auto_psv)) _QEI1Interrupt(void)
 {
     IFS3bits.QEI1IF = 0; //clear
+    // LED6 = ~LED6;
     if (POSCNT < 32768)
+        {
+            rotationCount1 = rotationCount1 + (long) 0x10000; // pos roll over
+            // rotationCount1++;
+        } else {
+            rotationCount1 = rotationCount1 - (long) 0x10000; // neg roll over
+            // rotationCount1--;
+     }
+    /*unsigned long current_millis = millis();
+    if ((current_millis - lastRotationCount1) > 5) {
+        LED6 = ~LED6;
+        // rotationCount1++;
+        if (POSCNT < 32768)
+        {
+            // rotationCount1 = rotationCount1 + (long) 0x10000; // pos roll over
+            rotationCount1++;
+        } else {
+            // rotationCount1 = rotationCount1 - (long) 0x10000; // neg roll over
+            rotationCount1--;
+        }
+        lastRotationCount1 = current_millis;
+    }*/
+    
+    /*if (POSCNT < 32768)
     {
-        rotationCount1 = rotationCount1+ (long) 0x10000; // pos roll over
+        // rotationCount1 = rotationCount1 + (long) 0x10000; // pos roll over
+        rotationCount1 = rotationCount1 + 65535;
     } else {
-        rotationCount1 = rotationCount1- (long) 0x10000; // neg roll over
-    }
+        // rotationCount1 = rotationCount1 - (long) 0x10000; // neg roll over
+        rotationCount1 = rotationCount1 - 65535;
+    }*/
 }
 
 void __attribute__((__interrupt__, auto_psv)) _QEI2Interrupt(void)

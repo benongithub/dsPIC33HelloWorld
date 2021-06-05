@@ -101,7 +101,7 @@ int main() {
     initTimer1InMS(1);
     startTimer1();   
     
-    initQEI1(0);
+    initQEI1(65500);
     initQEI2(0);
     
     unsigned long lastPosPrint = millis();
@@ -110,8 +110,9 @@ int main() {
         unsigned long current_millis = millis();
         if((unsigned long)(current_millis - lastPosPrint)>=100) {
             // printf("%ld \r\n", getPositionInCounts_2());
-            printf("%d\t%d \r\n", POSCNT, POS2CNT);
-            // printf("%d\t%ld \r\n", POS2CNT, getPositionInCounts_2());
+            // printf("%ud\t%ud \r\n", POSCNT, POS2CNT);
+            // printf("%u\t%ld \r\n", POSCNT, getPositionInCounts_1());
+            printf("%u\t%ld \r\n", POS2CNT, getPositionInCounts_2());
             lastPosPrint = current_millis;
         }
     };
