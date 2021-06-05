@@ -1,10 +1,3 @@
-/* 
- * File:   main.c
- * Author: Benedikt Müller
- *
- */
-
-
 /// Configuration Bits---------------------------
 
 // FBS
@@ -51,15 +44,12 @@
 #include "myTimers.h"
 #include "mypwm.h"
 #include "myadc.h"
+#include "myencoder.h"
 
 /// Defines----------------------------
 #define SEVEN_MEG_OSC 1//set to 1 if we use slow (7.3728 MHz) oscillator and not 16 MHz
 
-/*
- * 
- */
 int main() {
-    // int pinStatus;
 #if (SEVEN_MEG_OSC == 0) 
     /*** oscillator setup --------------------------------------------------
      * The external oscillator runs at 16MHz
@@ -72,9 +62,6 @@ int main() {
     PLLFBDbits.PLLDIV = 18; //set PPL to M=20 (18+2)
     CLKDIVbits.PLLPRE = 1; //N1 = input/3
     CLKDIVbits.PLLPOST = 0; //N2 = output/2
-
-
-
 #else //Below the 7.3728 Setup 
 
     /*** oscillator setup --------------------------------------------------
@@ -91,7 +78,6 @@ int main() {
     CLKDIVbits.PLLPOST = 0; //N2 = output/2
 #endif //SEVEN_MEG_OSC == 0
 
-
     /* Clock switch to incorporate PLL*/
     __builtin_write_OSCCONH(0x03); // Initiate Clock Switch to Primary
 
@@ -103,30 +89,50 @@ int main() {
     // In reality, give some time to the PLL to lock
     while (OSCCONbits.LOCK != 1); //Wait for PPL to lock
 
+    
     setupIO(); //configures inputs and outputs
+    
     LED4 = LEDOFF;
     LED5 = LEDOFF;
     LED6 = LEDOFF;
     LED7 = LEDOFF;
-    
-    // initTimer1(4166); //creates a 10ms timer interrupt
-    // setupPWM();
+
+    setupPWM();
     initTimer1InMS(1);
-    startTimer1();
+    startTimer1();   
     
-    printf("Init finished\r\n");
+    initQEI1(0);
+    initQEI2(0);
+    
+    unsigned long lastPosPrint = millis();
+    
+    while (1) {
+        unsigned long current_millis = millis();
+        if((unsigned long)(current_millis - lastPosPrint)>=100) {
+            // printf("%ld \r\n", getPositionInCounts_2());
+            printf("%d\t%d \r\n", POSCNT, POS2CNT);
+            // printf("%d\t%ld \r\n", POS2CNT, getPositionInCounts_2());
+            lastPosPrint = current_millis;
+        }
+    };
+    return 0;
+}
+
+/*
+    // initTimer1(4166); //creates a 10ms timer interrupt
+    // P1DC1 = 26666L;
+    // P1DC2 = 26666L;
+    // P1DC3 = 26666L; 
     printf("Millis at Start: %lu \r\n", millis());
     unsigned long test = millis();
     
     // printf("Start %d", myCounter);
-    /* printf("Please insert float: \r\n");
+    printf("Please insert Duty Cycle: \r\n");
     char buffer [32];
     int cnt = 0;
-    char ready = 0; */
+    char ready = 0;
     
     bool switchState = false;
-    
-    while (1) {
         unsigned long current_millis = millis();
         if((unsigned long)(current_millis - test)>=1000) {
             printf("Current %lu - Last %lu = %lu\r\n", current_millis, test, (unsigned long)(current_millis - test));
@@ -144,10 +150,13 @@ int main() {
         }
         // printf("%d \r\n", millisCounter);
         
-        /*if(ready == 1) {
+        if(ready == 1) {
             double f = 0;
             sscanf(buffer, "%lf", &f);
-            printf("Your float: %f \r\n", f);
+            printf("Your duty cyle: %f \r\n", f);
+            unsigned long dutyCycle = (2*26666L) * f;
+            printf("Your duty cyle: %lu \r\n", dutyCycle);
+            P1DC1 = dutyCycle;
             buffer[0] = '\0';
             ready = 0;
         } else {
@@ -161,8 +170,8 @@ int main() {
                 cnt = 0;
                 ready = 1;
             }
-        }*/
-		/*int a;
+        }
+		int a;
 		
 		while (_U1RXIF==0);			// Wait and Receive One Character
 		a = U1RXREG;
@@ -179,8 +188,5 @@ int main() {
 		while(!U1STAbits.TRMT);
 		U1TXREG = ' '; 	
 	
-		_U1RXIF=0;					// Clear UART RX Interrupt Flag*/
-    };
-    return 0;
-}
-
+		_U1RXIF=0;					// Clear UART RX Interrupt Flag
+ */

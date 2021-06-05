@@ -70,8 +70,7 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 {
     IFS0bits.T1IF = 0;           // reset Timer 1 interrupt flag 
     ++millisCounter;
-    
-    if(myCounter != comparator)
+    /*if(myCounter != comparator)
     {
         myCounter++;
     }
@@ -79,6 +78,5 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     {
         myCounter = 1;
         LED6=~LED6;
-    }
-    
-}//
+    }*/
+}

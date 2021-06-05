@@ -17,18 +17,22 @@ void setupIO()
     TRISBbits.TRISB13 = 0;
     TRISBbits.TRISB12 = 0;
     
-    // TRISBbits.TRISB8=0;// UART1 TX
+    // UART1 TX
+    TRISBbits.TRISB8=0;
 
     //PIN MAPPING
-    
     //before we map, we need to unlock
     __builtin_write_OSCCONL(OSCCON & 0xbf); // clear bit 6 (unlock, they are usually write protected)
     // PERIPHERAL receives data from which INPUT  
     // RPINR18bits.U1RXR = 9; //mapped to RP9 is U1 RX, CHANGE THIS
     //PERIPHERAL QEA Encoder 1, receives data from RP10
-    // RPINR14bits.QEA1R = 10; 
+    RPINR14bits.QEA1R = 10; 
     //PERIPHERAL QEB Encoder 1, receives data from RP11
-    // RPINR14bits.QEB1R = 11;
+    RPINR14bits.QEB1R = 11;
+    //PERIPHERAL QEA Encoder 2, receives data from RP7
+    RPINR16bits.QEA2R = 6; 
+    //PERIPHERAL QEB Encoder 2, receives data from RP8
+    RPINR16bits.QEB2R = 7;
     //OUTPUT PIN receives data from which PERIPHERAL, 
     //see table 11-2 in datasheet to check peripheral codes 
     // RPOR4bits.RP8R = 0b00011; //output bin RP2 gets data from peripheral U1 TX 
