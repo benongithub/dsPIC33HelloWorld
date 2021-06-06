@@ -12,7 +12,7 @@ void setupPWM()
 {
     P1TCONbits.PTEN = 0;
     P1TCONbits.PTCKPS = 0b00;
-    P1TPER = 26666;
+    P1TPER = 10000;
     PWM1CON1bits.PMOD1 = 1;
     
     PWM1CON1bits.PEN1H = 1;

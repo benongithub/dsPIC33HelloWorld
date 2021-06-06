@@ -45,9 +45,11 @@
 #include "mypwm.h"
 #include "myadc.h"
 #include "myencoder.h"
+#include "math.h"
 
 /// Defines----------------------------
 #define SEVEN_MEG_OSC 1//set to 1 if we use slow (7.3728 MHz) oscillator and not 16 MHz
+#define M_PI 3.14159265358979323846
 
 int main() {
 #if (SEVEN_MEG_OSC == 0) 
@@ -101,19 +103,34 @@ int main() {
     initTimer1InMS(1);
     startTimer1();   
     
-    initQEI1(65500);
+    initQEI1(0);
     initQEI2(0);
     
-    unsigned long lastPosPrint = millis();
+    // P1DC1 = 15000L;
+    
+    float t = 0;
+    
+    
+    unsigned long lastUpdate = millis();
+    unsigned long delayUpdate = 1;
     
     while (1) {
+        
+        // t += 0.001;
+        // float sineCurve = (26666L * sin(t*250)) + 26666L;
+        // P1DC1 = (long) sineCurve;
         unsigned long current_millis = millis();
-        if((unsigned long)(current_millis - lastPosPrint)>=100) {
-            // printf("%ld \r\n", getPositionInCounts_2());
-            // printf("%ud\t%ud \r\n", POSCNT, POS2CNT);
-            // printf("%u\t%ld \r\n", POSCNT, getPositionInCounts_1());
-            printf("%u\t%ld \r\n", POS2CNT, getPositionInCounts_2());
-            lastPosPrint = current_millis;
+        if((unsigned long)(current_millis - lastUpdate)>=delayUpdate) {
+            t += 0.001;
+            float sineCurve = (10000L * sin(2 * M_PI * 50 * t)) + 10000L;
+            P1DC1 = (long) sineCurve;
+            //  printf("%f\r\n", sineCurve);
+            // LED5 = ~LED5;
+            /*t++;
+            float sineCurve = (26666L * sin(t*2000)) + 26666L;
+            printf("%f\r\n", sineCurve);
+            P1DC1 = (long) sineCurve;*/
+            lastUpdate = current_millis;
         }
     };
     return 0;
@@ -190,4 +207,16 @@ int main() {
 		U1TXREG = ' '; 	
 	
 		_U1RXIF=0;					// Clear UART RX Interrupt Flag
+    while (1) {
+        unsigned long current_millis = millis();
+        if((unsigned long)(current_millis - lastPosPrint)>=100) {
+            // printf("%ld \r\n", getPositionInCounts_2());
+            // printf("%ud\t%ud \r\n", POSCNT, POS2CNT);
+            // printf("%u\t%ld \r\n", POSCNT, getPositionInCounts_1());
+            printf("%u\t%ld \r\n", POS2CNT, getPositionInCounts_2());
+            lastPosPrint = current_millis;
+        }
+    };
+ * 
+ * 
  */
